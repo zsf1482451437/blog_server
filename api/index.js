@@ -1,6 +1,6 @@
 const Koa = require("koa");
 const cors = require("@koa/cors");
-const pageViewsController = require("./server/controllers/pageViewsController");
+const pageViewsController = require("../server/controllers/pageViewsController");
 
 const app = new Koa();
 
