@@ -1,17 +1,13 @@
 const Koa = require("koa");
-const cors = require("@koa/cors");
-const pageViewsController = require("../server/controllers/pageViewsController");
+const bodyParser = require("koa-bodyparser");
+const PageController = require("../server/controllers/PageController");
 
 const app = new Koa();
 
-// 允许跨域请求
-app.use(cors());
+app.use(bodyParser());
+app.use(PageController.routes());
+app.use(PageController.allowedMethods());
 
-// 使用路由
-app.use(pageViewsController.routes());
-app.use(pageViewsController.allowedMethods());
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`服务器运行在 http://localhost:${PORT}`);
+app.listen(3000, () => {
+  console.log("服务运行在 3000 端口");
 });
