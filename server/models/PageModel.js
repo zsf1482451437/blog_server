@@ -66,21 +66,45 @@ class PageModel {
   // 增加页面浏览量
   incrementPageViews(path) {
     return new Promise((resolve, reject) => {
-      this.db.run(
-        "UPDATE page SET pageViews = pageViews + 1 WHERE path = ?",
+      this.db.get(
+        "SELECT pageViews FROM page WHERE path = ?",
         [path],
-        (err) => {
+        (err, row) => {
           if (err) {
             reject(err);
-          } else {
-            this.db.get(
-              "SELECT pageViews FROM page WHERE path = ?",
+          } else if (row) {
+            // 如果路径存在，更新 pageViews
+            this.db.run(
+              "UPDATE page SET pageViews = pageViews + 1 WHERE path = ?",
               [path],
-              (err, row) => {
+              (err) => {
                 if (err) {
                   reject(err);
                 } else {
-                  resolve(row.pageViews);
+                  this.db.get(
+                    "SELECT pageViews FROM page WHERE path = ?",
+                    [path],
+                    (err, row) => {
+                      if (err) {
+                        reject(err);
+                      } else {
+                        resolve(row.pageViews);
+                      }
+                    }
+                  );
+                }
+              }
+            );
+          } else {
+            // 如果路径不存在，插入新记录
+            this.db.run(
+              "INSERT INTO page (path, pageViews) VALUES (?, 1)",
+              [path],
+              (err) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  resolve(1);
                 }
               }
             );
