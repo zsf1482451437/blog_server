@@ -1,8 +1,8 @@
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 
-const dbPath =
-  process.env.DATABASE_PATH || path.resolve(__dirname, "..", "database.db");
+// 将数据库文件路径设置为 /tmp 目录
+const dbPath = path.resolve("/tmp", "database.db");
 
 class PageModel {
   constructor() {
