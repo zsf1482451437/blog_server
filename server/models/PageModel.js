@@ -1,8 +1,11 @@
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 
-// 将数据库文件路径设置为 /tmp 目录
-const dbPath = path.resolve("/tmp", "database.db");
+// 根据环境变量设置数据库文件路径
+const dbPath =
+  process.env.NODE_ENV === "production"
+    ? path.resolve("/tmp", "database.db")
+    : path.resolve(__dirname, "database.db");
 
 // 预设的页面路径
 const paths = [
@@ -59,8 +62,8 @@ const SELECT_PAGE_VIEWS = "SELECT pageViews FROM page WHERE path = ?";
 const UPDATE_PAGE_VIEWS =
   "UPDATE page SET pageViews = pageViews + 1 WHERE path = ?";
 
-// 插入一条新记录到 page 表中，包含 path 和 pageViews 字段，pageViews 初始值为 1
-const INSERT_NEW_PAGE = "INSERT INTO page (path, pageViews) VALUES (?, 1)";
+// 插入一条新记录到 page 表中，包含 path 和 pageViews 字段，pageViews 初始值为 648
+const INSERT_NEW_PAGE = "INSERT INTO page (path, pageViews) VALUES (?, 648)";
 
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
